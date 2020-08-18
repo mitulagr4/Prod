@@ -1,0 +1,27 @@
+<%- include("../partials/header"); %>
+<%- include("../partials/navbar"); %>
+
+<div class="container">
+
+	<div class="row text-center" style="display:flex; flex-wrap: wrap;">
+		<% allPosts.forEach(function(post){ %>
+			<div class="col col-xl-3 col-lg-4 col-md-4 col-sm-6 col-12">
+				<figure class="figure">
+					<img class="figure-img img-fluid rounded postImage"
+					src="<%= post.image %>"
+					onclick="handlePostClick('/posts/<%= post._id %>')"
+					>
+					<figcaption class="figure-caption cursordefault">
+						<% if(post.title.length > 20) { %>
+						<% 		post.title = post.title.substring(0, 20) + "..."; %>
+						<% } %>
+						<%= post.title %>
+					</figcaption>
+				</figure>
+			</div>
+		<% }); %>
+	</div>
+
+</div>
+
+<%- include("../partials/footer"); %>

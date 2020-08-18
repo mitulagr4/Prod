@@ -1,0 +1,97 @@
+<%- include("../partials/header") %>
+<%- include("../partials/navbar") %>
+
+<div class="container"><div class="row">
+<div class="col-md-6">
+    <figure class="figure">
+        <img class="figure-img img-fluid rounded" src="<%= post.image %>">
+    <figcaption>
+        <h4 class="cursordefault"><%= post.title %></h4>
+        <p><%= post.text %></p>
+        <p>
+            <em>By: <%= post.author.username %></em>
+        </p>
+        <% if(currentUser && post.author.id.equals(currentUser._id)) { %>
+        <a class="btn btn-outline-warning" href="/posts/<%= post._id %>/edit">
+            <i class="fas fa-pencil-alt"></i>
+        </a>
+        <form class="d-inline" action="/posts/<%= post._id %>?_method=DELETE" method="POST">
+            <button class="btn btn-outline-danger">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </form>
+        <% } %>
+    </figcaption>
+    </figure>
+</div>
+
+<div class="col-md-6">
+<div class="card card-body bg-dark">
+    <!-- ################ -->
+    <!-- ADD COMMENT FORM -->
+    <!-- ################ -->
+    <div class="container">
+    <form action="/posts/<%= post._id %>/comments" method="POST">
+        <div class="form-group">
+            <textarea class="form-control scrollbar-dark"
+                        name="comment[text]"
+                        cols="55"
+                        rows="3"
+                        wrap="hard"
+                        placeholder="Comment text"
+            ></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-outline-success btn-sm btn-block"
+            onclick="handleCommentSubmit(event)">
+                <i class="far fa-comment-alt cursordefault"></i>
+                Add Comment!
+            </button>
+        </div>
+    </form>
+    </div>
+    <hr>
+    <!-- ################# -->
+    <!-- SHOW ALL COMMENTS -->
+    <!-- ################# -->
+<% post.comments.forEach(function(comment){ %>
+<div class="col-md-12">
+    <strong><%= comment.author.username %></strong>
+    <% if(currentUser && comment.author.id.equals(currentUser._id)) { %>
+        <form class="d-inline" action="/posts/<%= post._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+            <button type="submit" class="btn btn-outline-danger btn-sm float-right ml-1">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </form>
+        <button class="btn btn-outline-warning btn-sm float-right cursordefault">
+            <i class="fas fa-pencil-alt cursorpointer"
+                onclick="handleCommentEdit(event)">
+            </i>
+        </button>
+    <% } %>
+    <form action="/posts/<%= post._id %>/comments/<%= comment._id %>?_method=PUT" method="POST">
+        <div class="form-group pt-3">
+            <textarea class="form-control comment scrollbar-dark"
+                        name="comment[text]"
+                        cols="55"
+                        rows="<%= Math.ceil(comment.text.length / 55) %>"
+                        wrap="hard"
+                        placeholder="Comment text"
+                        readonly
+                    ><%= comment.text %>
+            </textarea>
+        </div>
+        <div class="form-group d-none">
+            <button class="btn btn-outline-success btn-sm btn-block">
+                <i class="fas fa-save"></i>
+                Save!
+            </button>
+        </div>
+    </form>
+</div>
+<% }); %>
+</div>
+</div>
+</div></div>
+
+<%- include("../partials/footer") %>
