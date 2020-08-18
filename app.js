@@ -27,6 +27,10 @@ mongoose.connect(uri, {
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + '/node_modules/@fortawesome/fontawesome-free'));
+app.use(express.static(__dirname + '/node_modules/jquery/dist'));
+app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
+app.use(express.static(__dirname + '/node_modules/paper/dist'));
 app.use(methodOverride("_method"));
 app.use(flash());
 
